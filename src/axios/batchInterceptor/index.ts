@@ -1,2 +1,3 @@
 export * from './interceptor';
-export * from './batchRequestAdapter';
+export * from './adapter';
+export * from "./types";

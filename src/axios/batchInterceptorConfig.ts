@@ -13,12 +13,11 @@ export const axiosRequestConfig: AxiosRequestConfig = {
 
 export const mergeRequestConfigs = (requestConfigs: Record<UUID, AxiosRequestConfig>): AxiosRequestConfig => {
     const configsParamsEntries = getConfigParamsEntries(requestConfigs)
+    const configBase = Object.values(requestConfigs)[0];
 
     const mergedParams = configsParamsEntries.flatMap(([, ids]) => ids);
 
-    const configBase = requestConfigs[Object.keys(requestConfigs)[0]];
-
-    return {...configBase, params: {ids: mergedParams}};
+    return {...configBase, params: { ids: mergedParams }};
 }
 
 export const splitBatchResponse = (response: AxiosResponse<TBatchResponse>, requestConfigs: RequestConfigRecord) => {
@@ -27,11 +26,19 @@ export const splitBatchResponse = (response: AxiosResponse<TBatchResponse>, requ
     const responseEntries = configsParamsEntries.map(([uuid, ids]) => {
         const respItems = response.data.items.filter(({id}) => ids.includes(id))
 
-        return [uuid, {...response, data: respItems}];
+        return [uuid, {...response, data: { items: respItems }}];
     })
 
     return Object.fromEntries(responseEntries) as BatchRequestResponse<TBatchResponse>;
 }
+
+export const rejectFn = (response: AxiosResponse<TBatchResponse>): AxiosResponse<TBatchResponse> => {
+    if (!response.data.items.length) {
+        throw new Error('Requested file not found.');
+    }
+
+    return response;
+};
 
 const getConfigParamsEntries = (requestConfigs: Record<UUID, AxiosRequestConfig>) => {
     const configsEntries = Object.entries(requestConfigs);

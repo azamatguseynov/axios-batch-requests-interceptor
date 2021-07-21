@@ -1,11 +1,11 @@
 import axios, {AxiosInstance} from "axios";
 import {batchInterceptor} from "./batchInterceptor";
-import {axiosRequestConfig, mergeRequestConfigs, splitBatchResponse} from "./batchInterceptorConfig";
+import {axiosRequestConfig, mergeRequestConfigs, rejectFn, splitBatchResponse} from "./batchInterceptorConfig";
 
 const configureAxios = (): AxiosInstance => {
     const instance = axios.create(axiosRequestConfig);
 
-    batchInterceptor(instance, { mergeRequestConfigs, splitBatchResponse });
+    batchInterceptor(instance, { mergeRequestConfigs, splitBatchResponse, rejectFn });
 
     return instance;
 }

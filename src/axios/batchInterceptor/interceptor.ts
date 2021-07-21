@@ -1,13 +1,11 @@
 import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
-import {UUID} from "./helpers/uuid";
-import {batchRequestAdapter, BatchRequestResponse} from "./batchRequestAdapter";
-import {TBatchResponse} from "../batchInterceptorConfig";
-
-export type RequestConfigRecord = Record<UUID, AxiosRequestConfig>;
+import {batchRequestAdapter} from "./adapter";
+import {BatchRequestResponse, RequestConfigRecord} from "./types";
 
 export type BatchInterceptorConfig<T> = {
     mergeRequestConfigs: (requestConfigs: RequestConfigRecord) => AxiosRequestConfig
-    splitBatchResponse: (response: AxiosResponse<TBatchResponse>, requestConfigs: RequestConfigRecord) => BatchRequestResponse<T>
+    splitBatchResponse: (response: AxiosResponse<T>, requestConfigs: RequestConfigRecord) => BatchRequestResponse<T>
+    rejectFn: (response: AxiosResponse<T>) => AxiosResponse<T>;
     delayMs?: number;
 }
 

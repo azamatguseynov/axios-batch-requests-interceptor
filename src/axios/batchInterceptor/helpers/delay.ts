@@ -1,11 +1,11 @@
 import {UUID, uuidv4} from "./uuid";
 
-export const delay = (() => {
+export const createDelay = (delayMs: number) => {
     let timeout: any;
     let resolvers: Array<(uuid: UUID) => void> = [];
     let delayUuid = uuidv4();
 
-    return (delayMs: number) => {
+    return () => {
         const uuid = delayUuid;
         clearTimeout(timeout);
 
@@ -21,4 +21,4 @@ export const delay = (() => {
             }, delayMs);
         });
     }
-})();
+};
