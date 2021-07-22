@@ -8,13 +8,19 @@ function delay(ms: number) {
   });
 }
 
-// All requests should run at the same time and produce only one request
 function runTest() {
   const batchUrl = "/file-batch-api";
   axiosClient.get(batchUrl, {params: {ids: ["fileid1","fileid2"]}}).then((res) => console.log(res.data));
   axiosClient.get(batchUrl, {params: {ids: ["fileid4","fileid5"]}}).then((res) => console.log(res.data));
   axiosClient.get(batchUrl, {params: {ids: ["fileid6","fileid7"]}}).then((res) => console.log(res.data));
-  delay(1000).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid3"]}})).catch((error) => console.error(error));
+  axiosClient.get(batchUrl, {params: {ids: ["fileid3"]}}).catch((error) => console.error(error));
+
+  // will produce separate request
+  // by default batch interceptor has delay time = 0 and will catch only simultaneous requests
+  // but you can increase it in the config object
+  delay(100).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid2"]}})).then((res) => console.log(res));
+  delay(100).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid4"]}})).then((res) => console.log(res));
+  delay(100).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid3"]}})).catch((error) => console.error(error));
 }
 
 function App() {
