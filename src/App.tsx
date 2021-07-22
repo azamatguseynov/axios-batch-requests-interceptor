@@ -17,7 +17,7 @@ function runTest() {
 
   // will produce separate request
   // by default batch interceptor has delay time = 0 and will catch only simultaneous requests
-  // but you can increase it in the config object
+  // but you can increase delay in the config object
   delay(100).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid2"]}})).then((res) => console.log(res));
   delay(100).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid4"]}})).then((res) => console.log(res));
   delay(100).then(() => axiosClient.get(batchUrl, {params: {ids: ["fileid3"]}})).catch((error) => console.error(error));
