@@ -1,4 +1,4 @@
-# Axios butch requests interceptor
+# Axios batch requests interceptor
 An Interceptor that helps to batch simultaneous requests to one.
 
 ###How to use:
